@@ -35,7 +35,7 @@
     const filename = urlParams.get('file');
 
     function checkString(str) {
-        return str != null && isNaN(str) && !str.includes("Assets/");
+        return str != null && isNaN(str) && !str.includes("Assets/") && !str.includes("ffffffff");
     }
 
     // Fetch and display the JSON content
@@ -47,11 +47,17 @@
           const entries = Object.entries(data);
 
           for (const [key, value] of entries) {
+            var idkwhat = (checkString(value['Params[1]']) ? value['Params[1]']: "");
             var speaker = (checkString(value['Params[2]']) ? value['Params[2]'] + ':' : "");
             var content = (checkString(value['Params[3]']) ? value['Params[3]'] : "");
-            if (speaker !== "" || content !== "") {
+            if (speaker !== "" || content !== "" || idkwhat !== "") {
                 const entry = document.createElement('div');
                 entry.className = 'entry';
+
+                const idkwhatElement = document.createElement('span');
+                idkwhatElement.className = 'idkwhat';
+                idkwhatElement.textContent = idkwhat;
+                entry.appendChild(idkwhatElement);
 
                 const keyElement = document.createElement('span');
                 keyElement.className = 'key';
