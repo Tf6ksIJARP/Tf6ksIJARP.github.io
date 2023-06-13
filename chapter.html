@@ -37,7 +37,7 @@
           const container = document.getElementById('container');
 
           const chapterTitle = document.createElement('h1');
-          chapterTitle.textContent = `${chapter.SubName} - ${chapter.Name}`;
+          chapterTitle.textContent = `(chapter.SubName != null ? (${chapter.SubName}) - : "") ${chapter.Name}`;
           container.appendChild(chapterTitle);
 
           const chapterDesc = document.createElement('p');
