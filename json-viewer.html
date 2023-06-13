@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSON Viewer</title>
+  <style>
+    .entry {
+      margin-bottom: 10px;
+    }
+    .key {
+      font-weight: bold;
+    }
+    .value {
+      margin-left: 10px;
+    }
+    button {
+      background-color: #525252;
+      width: 200px;
+      font-size: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 3px solid darkgray;
+      color: white;
+      cursor: pointer;
+      position: relative;
+      left: 30%;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="goBack()">Back</button>
+  <button onclick="goHome()">Home</button>
+  <script>
+    // Get the filename from the query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const filename = urlParams.get('file');
+
+    function checkString(str) {
+        return str != null && isNaN(str) && !str.includes("Assets/");
+    }
+
+    // Fetch and display the JSON content
+    function displayJsonContent(filename) {
+      fetch(filename)
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById('container');
+          const entries = Object.entries(data);
+
+          for (const [key, value] of entries) {
+            var speaker = (checkString(value['Params[2]']) ? value['Params[2]'] + ':' : "");
+            var content = (checkString(value['Params[3]']) ? value['Params[3]'] : "");
+            if (speaker !== "" || content !== "") {
+                const entry = document.createElement('div');
+                entry.className = 'entry';
+
+                const keyElement = document.createElement('span');
+                keyElement.className = 'key';
+                keyElement.textContent = speaker;
+                entry.appendChild(keyElement);
+
+                const valueElement = document.createElement('span');
+                valueElement.className = 'value';
+                valueElement.textContent = content;
+                entry.appendChild(valueElement);
+
+                container.appendChild(entry);
+            }
+          }
+        })
+        .catch(error => console.error(error));
+    }
+
+    // Display the JSON content
+    displayJsonContent(filename);
+
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+  <div id="container"></div>
+</body>
+</html>

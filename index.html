@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JSON Content Display</title>
+  <style>
+    .thumbnail:hover {
+      box-shadow: 0 0 12px 10px rgba(0, 50, 50, 0.5);
+    }
+
+    div {
+      text-align: center;
+    }
+
+    .thumbnail {
+      display: inline-flex;
+      background-size: 300px;
+      border: 1px solid #000;
+      border-radius: 12px;
+      padding: 15px;
+      width: 250px;
+      height: 110px;
+      background-size: 300px;
+      position: relative;
+      margin: 10px;
+      cursor: pointer;
+    }
+
+    .thumbnail .name {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      color: white;
+      font-size: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div id="thumbs"></div>
+  <script>
+    fetch('StoryChapter.json')
+    .then((response) => response.json())
+    .then((jsonData) => {
+
+        function createThumbnail(chapter) {
+          const thumbs = document.getElementById('thumbs');
+
+          const thumbnail = document.createElement('div');
+          thumbnail.className = 'thumbnail';
+
+          <!-- const image = document.createElement('img'); -->
+          <!-- image.src = chapter.Bg; -->
+
+          const nameElement = document.createElement('div');
+          nameElement.className = 'name';
+          nameElement.textContent = chapter.Name;
+          thumbnail.style.backgroundImage = `url(${chapter.Bg})`;
+
+          <!-- thumbnail.appendChild(image); -->
+          thumbnail.appendChild(nameElement);
+          thumbs.appendChild(thumbnail);
+          <!-- thumbnail.style.backgroundImage = `url(${chapter.Bg})`; -->
+          <!-- thumbnail.textContent = chapter.Name; -->
+          thumbnail.onclick = function() {
+            window.location.href = `chapter.html?id=${chapter.Id}`;
+          };
+        }
+
+        jsonData.forEach(chapter => {
+          createThumbnail(chapter);
+        });
+    });
+  </script>
+</body>
+</html>

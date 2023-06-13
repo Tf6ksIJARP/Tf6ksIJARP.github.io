@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Chapter Details</title>
+  <style>
+    button {
+      background-color: #525252;
+      width: 200px;
+      font-size: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      border: 3px solid darkgray;
+      color: white;
+      cursor: pointer;
+      position: relative;
+      left: 30%;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="goHome()">Home</button>
+  <div id="container"></div>
+
+  <script>
+    // JSON data containing chapter details
+    fetch('StoryDetail.json')
+    .then((response) => response.json())
+    .then((jsonData) => {
+        // Get the chapter ID from the query parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const chapterId = urlParams.get('id');
+
+        // Find the chapter details based on the chapter ID
+        const chapters = jsonData.filter(chapter => chapter.ChapterId === chapterId);
+
+        chapters.forEach((chapter) => {
+          const container = document.getElementById('container');
+
+          const chapterTitle = document.createElement('h1');
+          chapterTitle.textContent = `${chapter.SubName} - ${chapter.Name}`;
+          container.appendChild(chapterTitle);
+
+          const chapterDesc = document.createElement('p');
+          chapterDesc.textContent = chapter.Desc;
+          container.appendChild(chapterDesc);
+
+          if (chapter['StoryId[0]'] != null) {
+              const link1 = document.createElement('a');
+              var filename1 = 'movies/Movie' + chapter['StoryId[0]'] +'.json';
+              link1.href = `json-viewer.html?file=${encodeURIComponent(filename1)}`;
+              link1.textContent = 'Begining';
+              link1.className = 'file-link1';
+              container.appendChild(link1);
+              container.appendChild(document.createElement('br'));
+          }
+
+          if (chapter['StoryId[1]'] != null) {
+              const link2 = document.createElement('a');
+              var filename2 = 'movies/Movie' + chapter['StoryId[1]'] +'.json';
+              link2.href = `json-viewer.html?file=${encodeURIComponent(filename2)}`;
+              link2.textContent = 'Ending';
+              link2.className = 'file-link2';
+              container.appendChild(link2);
+              container.appendChild(document.createElement('br'));
+          }
+        });
+    });
+
+    // Function to go back to the previous page
+    function goHome() {
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
